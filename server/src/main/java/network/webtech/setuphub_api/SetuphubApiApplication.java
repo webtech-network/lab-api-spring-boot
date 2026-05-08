@@ -9,5 +9,4 @@ public class SetuphubApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SetuphubApiApplication.class, args);
 	}
-
 }
