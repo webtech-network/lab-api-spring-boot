@@ -1,10 +1,10 @@
-import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, Pencil, Search } from 'lucide-react';
+import { EmptyState } from '@/components/EmptyState';
 import { Navbar } from '@/components/Navbar';
 import { SetupForm } from '@/components/SetupForm';
-import { EmptyState } from '@/components/EmptyState';
 import { Button } from '@/components/ui/button';
 import { useSetups } from '@/lib/setup-store';
+import { Pencil, Search } from 'lucide-react';
+import { Link, useParams } from 'react-router-dom';
 
 export function EditSetupPage() {
     const { id = '' } = useParams();
@@ -15,13 +15,6 @@ export function EditSetupPage() {
         <div className="min-h-screen pb-24">
             <Navbar />
             <div className="mx-auto max-w-3xl px-4 py-12 md:px-8">
-                <Link
-                    to={`/setups/${id}`}
-                    className="mb-6 inline-flex cursor-pointer items-center gap-2 text-sm text-muted-foreground transition-smooth hover:text-foreground"
-                >
-                    <ArrowLeft className="h-4 w-4" /> Voltar
-                </Link>
-
                 {!setup ? (
                     <EmptyState
                         icon={Search}

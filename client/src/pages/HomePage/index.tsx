@@ -23,7 +23,7 @@ export function HomePage() {
                 <div className="pointer-events-none absolute inset-0 bg-gradient-hero opacity-70" />
 
                 <div className="relative mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
-                    <div className="mx-auto max-w-3xl space-y-8 rounded-[2rem] border border-border/40 bg-surface/45 p-8 text-center shadow-elegant backdrop-blur-md md:p-12">
+                    <div className="mx-auto max-w-3xl space-y-8 rounded-[2rem] border border-border/40 bg-surface/45 p-8 text-center shadow-elegant md:p-12">
                         <h1 className="font-display text-4xl font-semibold leading-[1.06] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
                             <span className="block">Os setups que</span>
                             <em className="block text-gradient not-italic">moldam código.</em>
