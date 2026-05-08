@@ -7,6 +7,6 @@ import network.webtech.setuphub_api.entity.Setup;
 
 @Mapper(componentModel = "spring")
 public interface SetupMapper {
- 
+
     SetupResponse toResponse(Setup setup);
 }
