@@ -15,5 +15,4 @@ public record SetupResponse(
         String imageUrl,
         BigDecimal estimatedCost,
         LocalDateTime createdAt) {
-
 }

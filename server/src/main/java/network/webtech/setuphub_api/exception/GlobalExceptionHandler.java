@@ -14,42 +14,58 @@ import network.webtech.setuphub_api.dto.response.ErrorResponse;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(SetupNotFoundException.class)
+        @ExceptionHandler(SetupNotFoundException.class)
 
-    public ResponseEntity<ErrorResponse> handleNotFound(
-            SetupNotFoundException ex,
-            HttpServletRequest request) {
-        ErrorResponse error = ErrorResponse.of(
-                HttpStatus.NOT_FOUND.value(),
-                "Not Found",
-                ex.getMessage(),
-                request.getRequestURI());
+        public ResponseEntity<ErrorResponse> handleNotFound(
+                        SetupNotFoundException ex,
+                        HttpServletRequest request) {
+                ErrorResponse error = ErrorResponse.of(
+                                HttpStatus.NOT_FOUND.value(),
+                                "Not Found",
+                                ex.getMessage(),
+                                request.getRequestURI());
 
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(error);
-    }
+                return ResponseEntity
+                                .status(HttpStatus.NOT_FOUND)
+                                .body(error);
+        }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+        @ExceptionHandler(GearItemNotFoundException.class)
 
-    public ResponseEntity<ErrorResponse> handleValidationErrors(
-            MethodArgumentNotValidException ex,
-            HttpServletRequest request
+        public ResponseEntity<ErrorResponse> handleGearItemNotFound(
+                        GearItemNotFoundException ex,
+                        HttpServletRequest request) {
+                ErrorResponse error = ErrorResponse.of(
+                                HttpStatus.NOT_FOUND.value(),
+                                "Not Found",
+                                ex.getMessage(),
+                                request.getRequestURI());
 
-    ) {
+                return ResponseEntity
+                                .status(HttpStatus.NOT_FOUND)
+                                .body(error);
+        }
 
-        String errors = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                .collect(Collectors.joining(", "));
+        @ExceptionHandler(MethodArgumentNotValidException.class)
 
-        ErrorResponse error = ErrorResponse.of(
-                HttpStatus.BAD_REQUEST.value(),
-                "Validation Failed",
-                errors,
-                request.getRequestURI());
+        public ResponseEntity<ErrorResponse> handleValidationErrors(
+                        MethodArgumentNotValidException ex,
+                        HttpServletRequest request
 
-        return ResponseEntity.badRequest().body(error);
-    }
+        ) {
+
+                String errors = ex.getBindingResult()
+                                .getFieldErrors()
+                                .stream()
+                                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                                .collect(Collectors.joining(", "));
+
+                ErrorResponse error = ErrorResponse.of(
+                                HttpStatus.BAD_REQUEST.value(),
+                                "Validation Failed",
+                                errors,
+                                request.getRequestURI());
+
+                return ResponseEntity.badRequest().body(error);
+        }
 }
