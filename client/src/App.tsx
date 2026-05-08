@@ -1,11 +1,12 @@
-import { AppLayout } from '@/layouts/AppLayout';
+import { Toaster } from '@/components/ui/sonner';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './router';
 
 export function App() {
     return (
-        <AppLayout>
+        <>
             <RouterProvider router={router} />
-        </AppLayout>
+            <Toaster richColors theme="dark" position="top-right" />
+        </>
     );
 }
