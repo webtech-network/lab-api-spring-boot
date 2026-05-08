@@ -1,8 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import {
     Select,
     SelectContent,
@@ -10,6 +7,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import {
     CATEGORY_LABELS,
     SETUP_CATEGORIES,
@@ -17,6 +15,8 @@ import {
     type Setup,
     type SetupCategory,
 } from '@/lib/setup-store';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function SetupForm({ initial }: { initial?: Setup }) {
     const navigate = useNavigate();
@@ -50,21 +50,21 @@ export function SetupForm({ initial }: { initial?: Setup }) {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
-            <Field label="Título" hint="Dê um nome marcante ao seu setup">
+            <Field label="Title" hint="Give your setup a catchy name">
                 <Input
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Ex: Cyber Dev Cave"
+                    placeholder="e.g. Cyber Dev Cave"
                     required
                     className="h-12 rounded-xl border-border/60 bg-surface text-base"
                 />
             </Field>
 
-            <Field label="Descrição" hint="Conte a história por trás do setup">
+            <Field label="Description" hint="Tell the story behind your setup">
                 <Textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Ergonomia, iluminação, vibe que você buscou..."
+                    placeholder="Ergonomics, lighting, the vibe you were going for..."
                     required
                     rows={5}
                     className="resize-none rounded-xl border-border/60 bg-surface text-base"
@@ -72,7 +72,7 @@ export function SetupForm({ initial }: { initial?: Setup }) {
             </Field>
 
             <div className="grid gap-6 md:grid-cols-2">
-                <Field label="Categoria">
+                <Field label="Category">
                     <Select value={category} onValueChange={(v) => setCategory(v as SetupCategory)}>
                         <SelectTrigger className="h-12 rounded-xl border-border/60 bg-surface">
                             <SelectValue />
@@ -87,7 +87,7 @@ export function SetupForm({ initial }: { initial?: Setup }) {
                     </Select>
                 </Field>
 
-                <Field label="Orçamento estimado (R$)">
+                <Field label="Estimated budget (R$)">
                     <Input
                         type="number"
                         min={0}
@@ -101,7 +101,7 @@ export function SetupForm({ initial }: { initial?: Setup }) {
                 </Field>
             </div>
 
-            <Field label="URL da imagem" hint="Opcional. Cole o link de uma imagem do seu setup.">
+            <Field label="Image URL" hint="Optional. Paste a link to an image of your setup.">
                 <Input
                     type="url"
                     value={imageUrl}
@@ -113,10 +113,10 @@ export function SetupForm({ initial }: { initial?: Setup }) {
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
                 <Button type="submit" variant="hero" size="lg">
-                    {initial ? 'Salvar alterações' : 'Publicar setup'}
+                    {initial ? 'Save changes' : 'Publish setup'}
                 </Button>
                 <Button type="button" variant="ghost" size="lg" onClick={() => navigate('/')}>
-                    Cancelar
+                    Cancel
                 </Button>
             </div>
         </form>

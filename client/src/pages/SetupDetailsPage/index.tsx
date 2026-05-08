@@ -30,11 +30,11 @@ export function SetupDetailsPage() {
                 <div className="mx-auto max-w-3xl px-4 py-24 md:px-8">
                     <EmptyState
                         icon={SearchX}
-                        title="Setup não encontrado"
-                        description="O setup que você procura pode ter sido removido ou nunca existiu."
+                        title="Setup not found"
+                        description="The setup you're looking for may have been removed or never existed."
                         action={
                             <Button asChild variant="hero">
-                                <Link to="/">Voltar para a galeria</Link>
+                                <Link to="/">Back to gallery</Link>
                             </Button>
                         }
                     />
@@ -49,7 +49,6 @@ export function SetupDetailsPage() {
         <div className="min-h-screen pb-24">
             <Navbar />
 
-            {/* BANNER */}
             <section className="relative">
                 <div className="relative h-[55vh] min-h-[420px] w-full overflow-hidden">
                     <img
@@ -66,7 +65,7 @@ export function SetupDetailsPage() {
                         to="/"
                         className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/60 bg-surface/80 px-4 py-2 text-xs font-medium text-muted-foreground backdrop-blur-md transition-smooth hover:text-foreground"
                     >
-                        <ArrowLeft className="h-3.5 w-3.5" /> Galeria
+                        <ArrowLeft className="h-3.5 w-3.5" /> Gallery
                     </Link>
 
                     <div className="glass-strong relative overflow-hidden rounded-3xl p-8 md:p-12">
@@ -81,7 +80,7 @@ export function SetupDetailsPage() {
                                 <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
                                     <span className="inline-flex items-center gap-2">
                                         <Calendar className="h-4 w-4" />
-                                        {new Date(setup.createdAt).toLocaleDateString('pt-BR', {
+                                        {new Date(setup.createdAt).toLocaleDateString('en-US', {
                                             day: '2-digit',
                                             month: 'long',
                                             year: 'numeric',
@@ -93,7 +92,7 @@ export function SetupDetailsPage() {
                             <div className="flex flex-col items-start gap-4 lg:items-end">
                                 <div className="rounded-2xl border border-border/60 bg-surface px-6 py-4 text-right">
                                     <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                                        Custo estimado
+                                        Estimated cost
                                     </div>
                                     <div className="font-display text-3xl font-bold text-gradient">
                                         {formatCurrency(setup.estimatedCost)}
@@ -102,7 +101,7 @@ export function SetupDetailsPage() {
                                 <div className="flex gap-2">
                                     <Button asChild variant="glass" size="default">
                                         <Link to={`/setups/${setup.id}/edit`}>
-                                            <Pencil className="h-4 w-4" /> Editar
+                                            <Pencil className="h-4 w-4" /> Edit
                                         </Link>
                                     </Button>
 
@@ -113,22 +112,22 @@ export function SetupDetailsPage() {
                                                 size="default"
                                                 className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                                             >
-                                                <Trash2 className="h-4 w-4" /> Deletar
+                                                <Trash2 className="h-4 w-4" /> Delete
                                             </Button>
                                         </AlertDialogTrigger>
                                         <AlertDialogContent className="glass-strong rounded-2xl border-border/50">
                                             <AlertDialogHeader>
                                                 <AlertDialogTitle className="font-display">
-                                                    Deletar este setup?
+                                                    Delete this setup?
                                                 </AlertDialogTitle>
                                                 <AlertDialogDescription>
-                                                    Essa ação não pode ser desfeita. O setup e todos
-                                                    os gear items serão removidos permanentemente.
+                                                    This action cannot be undone. The setup and all
+                                                    gear items will be permanently removed.
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
                                                 <AlertDialogCancel className="rounded-xl">
-                                                    Cancelar
+                                                    Cancel
                                                 </AlertDialogCancel>
                                                 <AlertDialogAction
                                                     className="rounded-xl bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -137,7 +136,7 @@ export function SetupDetailsPage() {
                                                         navigate('/');
                                                     }}
                                                 >
-                                                    Deletar setup
+                                                    Delete setup
                                                 </AlertDialogAction>
                                             </AlertDialogFooter>
                                         </AlertDialogContent>
@@ -149,12 +148,11 @@ export function SetupDetailsPage() {
                 </div>
             </section>
 
-            {/* CONTENT */}
             <section className="mx-auto mt-12 grid max-w-7xl gap-10 px-4 md:px-8 lg:grid-cols-[1.5fr_1fr]">
                 <div className="space-y-10">
                     <div>
                         <h2 className="mb-4 font-display text-2xl font-bold tracking-tight">
-                            Sobre o setup
+                            About the setup
                         </h2>
                         <p className="text-base leading-relaxed text-muted-foreground">
                             {setup.description}
@@ -165,7 +163,7 @@ export function SetupDetailsPage() {
                         <div className="mb-5 flex items-center justify-between">
                             <div>
                                 <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                                    Equipamentos
+                                    Equipment
                                 </div>
                                 <h2 className="font-display text-2xl font-bold tracking-tight">
                                     Gear list ({setup.gear.length})
@@ -177,8 +175,8 @@ export function SetupDetailsPage() {
                         {setup.gear.length === 0 ? (
                             <EmptyState
                                 icon={Plus}
-                                title="Sem gear ainda"
-                                description="Adicione os equipamentos que compõem esse setup. Teclado, mouse, monitor, cadeira — tudo conta."
+                                title="No gear yet"
+                                description="Add the equipment that makes up this setup. Keyboard, mouse, monitor, chair — everything counts."
                                 action={<AddGearButton setupId={setup.id} />}
                             />
                         ) : (
@@ -190,20 +188,20 @@ export function SetupDetailsPage() {
                 <aside className="space-y-4">
                     <div className="glass rounded-2xl p-6">
                         <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                            Resumo
+                            Summary
                         </div>
-                        <h3 className="mt-1 font-display text-xl font-bold">Investimento total</h3>
+                        <h3 className="mt-1 font-display text-xl font-bold">Total investment</h3>
                         <div className="mt-4 space-y-3">
                             <SummaryRow
-                                label="Custo estimado"
+                                label="Estimated cost"
                                 value={formatCurrency(setup.estimatedCost)}
                             />
-                            <SummaryRow label="Soma do gear" value={formatCurrency(totalGear)} />
+                            <SummaryRow label="Gear total" value={formatCurrency(totalGear)} />
                             <SummaryRow
-                                label="Itens cadastrados"
+                                label="Registered items"
                                 value={String(setup.gear.length)}
                             />
-                            <SummaryRow label="Categoria" value={CATEGORY_LABELS[setup.category]} />
+                            <SummaryRow label="Category" value={CATEGORY_LABELS[setup.category]} />
                         </div>
                     </div>
                 </aside>

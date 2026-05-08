@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Pencil, Plus, Trash2, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogContent,
@@ -7,7 +6,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
     Select,
@@ -24,6 +22,8 @@ import {
     type GearItem,
     type GearType,
 } from '@/lib/setup-store';
+import { Pencil, Plus, Trash2, X } from 'lucide-react';
+import { useState } from 'react';
 
 export function GearDialog({
     setupId,
@@ -75,21 +75,21 @@ export function GearDialog({
             <DialogContent className="glass-strong max-w-md rounded-2xl border-border/50">
                 <DialogHeader>
                     <DialogTitle className="font-display text-xl">
-                        {initial ? 'Editar item' : 'Adicionar gear'}
+                        {initial ? 'Edit item' : 'Add gear'}
                     </DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4 pt-2">
-                    <FormRow label="Nome">
+                    <FormRow label="Name">
                         <Input
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
-                            placeholder="Ex: MX Master 3S"
+                            placeholder="e.g. MX Master 3S"
                             className="h-11 rounded-xl border-border/60 bg-surface"
                         />
                     </FormRow>
                     <div className="grid gap-4 sm:grid-cols-2">
-                        <FormRow label="Marca">
+                        <FormRow label="Brand">
                             <Input
                                 value={brand}
                                 onChange={(e) => setBrand(e.target.value)}
@@ -98,7 +98,7 @@ export function GearDialog({
                                 className="h-11 rounded-xl border-border/60 bg-surface"
                             />
                         </FormRow>
-                        <FormRow label="Tipo">
+                        <FormRow label="Type">
                             <Select value={type} onValueChange={(v) => setType(v as GearType)}>
                                 <SelectTrigger className="h-11 rounded-xl border-border/60 bg-surface">
                                     <SelectValue />
@@ -113,7 +113,7 @@ export function GearDialog({
                             </Select>
                         </FormRow>
                     </div>
-                    <FormRow label="Preço (R$)">
+                    <FormRow label="Price">
                         <Input
                             type="number"
                             min={0}
@@ -127,10 +127,10 @@ export function GearDialog({
                     </FormRow>
                     <div className="flex justify-end gap-2 pt-2">
                         <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
-                            Cancelar
+                            Cancel
                         </Button>
                         <Button type="submit" variant="hero">
-                            {initial ? 'Salvar' : 'Adicionar'}
+                            {initial ? 'Save' : 'Add'}
                         </Button>
                     </div>
                 </form>
@@ -214,7 +214,7 @@ export function AddGearButton({ setupId }: { setupId: string }) {
             setupId={setupId}
             trigger={
                 <Button variant="glass" size="lg" className="rounded-2xl">
-                    <Plus className="h-4 w-4" /> Adicionar gear
+                    <Plus className="h-4 w-4" /> Add gear
                 </Button>
             }
         />

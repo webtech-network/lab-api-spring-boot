@@ -1,9 +1,9 @@
-import { Navigate, createBrowserRouter } from 'react-router-dom';
+import { EditSetupPage } from '@/pages/EditSetupPage';
 import { HomePage } from '@/pages/HomePage';
 import { NewSetupPage } from '@/pages/NewSetupPage';
-import { SetupDetailsPage } from '@/pages/SetupDetailsPage';
-import { EditSetupPage } from '@/pages/EditSetupPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
+import { SetupDetailsPage } from '@/pages/SetupDetailsPage';
+import { Navigate, createBrowserRouter } from 'react-router-dom';
 
 export const router = createBrowserRouter([
     { path: '/', element: <HomePage /> },

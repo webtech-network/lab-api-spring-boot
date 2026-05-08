@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
-import { ArrowUpRight, Layers } from 'lucide-react';
 import { CATEGORY_LABELS, formatCurrency, GEAR_LABELS, type Setup } from '@/lib/setup-store';
+import { ArrowUpRight, Layers } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export function SetupCard({ setup, featured = false }: { setup: Setup; featured?: boolean }) {
     return (
@@ -39,7 +39,7 @@ export function SetupCard({ setup, featured = false }: { setup: Setup; featured?
                     </div>
                     <div className="text-right">
                         <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                            Custo
+                            Cost
                         </div>
                         <div className="font-mono text-sm font-semibold text-gradient">
                             {formatCurrency(setup.estimatedCost)}
