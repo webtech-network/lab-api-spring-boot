@@ -19,17 +19,17 @@ export function EditSetupPage() {
                     to={`/setups/${id}`}
                     className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground transition-smooth hover:text-foreground"
                 >
-                    <ArrowLeft className="h-4 w-4" /> Back
+                    <ArrowLeft className="h-4 w-4" /> Voltar
                 </Link>
 
                 {!setup ? (
                     <EmptyState
                         icon={Search}
-                        title="Setup not found"
-                        description="We couldn't find this setup."
+                        title="Setup não encontrado"
+                        description="Não conseguimos encontrar este setup."
                         action={
                             <Button asChild variant="hero">
-                                <Link to="/">Go to gallery</Link>
+                                <Link to="/">Ir para galeria</Link>
                             </Button>
                         }
                     />

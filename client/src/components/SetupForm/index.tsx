@@ -50,21 +50,21 @@ export function SetupForm({ initial }: { initial?: Setup }) {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
-            <Field label="Title" hint="Give your setup a catchy name">
+            <Field label="Título" hint="Dê um nome marcante ao seu setup">
                 <Input
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="e.g. Cyber Dev Cave"
+                    placeholder="Ex: Cyber Dev Cave"
                     required
                     className="h-12 rounded-xl border-border/60 bg-surface text-base"
                 />
             </Field>
 
-            <Field label="Description" hint="Tell the story behind your setup">
+            <Field label="Descrição" hint="Conte a história por trás do setup">
                 <Textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Ergonomics, lighting, the vibe you were going for..."
+                    placeholder="Ergonomia, iluminação, vibe que você buscou..."
                     required
                     rows={5}
                     className="resize-none rounded-xl border-border/60 bg-surface text-base"
@@ -72,7 +72,7 @@ export function SetupForm({ initial }: { initial?: Setup }) {
             </Field>
 
             <div className="grid gap-6 md:grid-cols-2">
-                <Field label="Category">
+                <Field label="Categoria">
                     <Select value={category} onValueChange={(v) => setCategory(v as SetupCategory)}>
                         <SelectTrigger className="h-12 rounded-xl border-border/60 bg-surface">
                             <SelectValue />
@@ -87,7 +87,7 @@ export function SetupForm({ initial }: { initial?: Setup }) {
                     </Select>
                 </Field>
 
-                <Field label="Estimated budget (R$)">
+                <Field label="Orçamento estimado (R$)">
                     <Input
                         type="number"
                         min={0}
@@ -101,7 +101,7 @@ export function SetupForm({ initial }: { initial?: Setup }) {
                 </Field>
             </div>
 
-            <Field label="Image URL" hint="Optional. Paste a link to an image of your setup.">
+            <Field label="URL da imagem" hint="Opcional. Cole o link de uma imagem do seu setup.">
                 <Input
                     type="url"
                     value={imageUrl}
@@ -113,10 +113,10 @@ export function SetupForm({ initial }: { initial?: Setup }) {
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
                 <Button type="submit" variant="hero" size="lg">
-                    {initial ? 'Save changes' : 'Publish setup'}
+                    {initial ? 'Salvar alterações' : 'Publicar setup'}
                 </Button>
                 <Button type="button" variant="ghost" size="lg" onClick={() => navigate('/')}>
-                    Cancel
+                    Cancelar
                 </Button>
             </div>
         </form>

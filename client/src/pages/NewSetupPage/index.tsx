@@ -12,7 +12,7 @@ export function NewSetupPage() {
                     to="/"
                     className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground transition-smooth hover:text-foreground"
                 >
-                    <ArrowLeft className="h-4 w-4" /> Back
+                    <ArrowLeft className="h-4 w-4" /> Voltar
                 </Link>
 
                 <div className="mb-10 flex items-center gap-4">
@@ -21,10 +21,10 @@ export function NewSetupPage() {
                     </div>
                     <div>
                         <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                            New setup
+                            Novo setup
                         </div>
                         <h1 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
-                            Share your workspace
+                            Compartilhe seu workspace
                         </h1>
                     </div>
                 </div>

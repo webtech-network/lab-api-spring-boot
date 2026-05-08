@@ -39,7 +39,7 @@ export function SetupCard({ setup, featured = false }: { setup: Setup; featured?
                     </div>
                     <div className="text-right">
                         <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                            Cost
+                            Custo
                         </div>
                         <div className="font-mono text-sm font-semibold text-gradient">
                             {formatCurrency(setup.estimatedCost)}

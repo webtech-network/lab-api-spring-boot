@@ -30,11 +30,11 @@ export function SetupDetailsPage() {
                 <div className="mx-auto max-w-3xl px-4 py-24 md:px-8">
                     <EmptyState
                         icon={SearchX}
-                        title="Setup not found"
-                        description="The setup you're looking for may have been removed or never existed."
+                        title="Setup não encontrado"
+                        description="O setup que você procura pode ter sido removido ou nunca existiu."
                         action={
                             <Button asChild variant="hero">
-                                <Link to="/">Back to gallery</Link>
+                                <Link to="/">Voltar para a galeria</Link>
                             </Button>
                         }
                     />
@@ -65,7 +65,7 @@ export function SetupDetailsPage() {
                         to="/"
                         className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/60 bg-surface/80 px-4 py-2 text-xs font-medium text-muted-foreground backdrop-blur-md transition-smooth hover:text-foreground"
                     >
-                        <ArrowLeft className="h-3.5 w-3.5" /> Gallery
+                        <ArrowLeft className="h-3.5 w-3.5" /> Galeria
                     </Link>
 
                     <div className="glass-strong relative overflow-hidden rounded-3xl p-8 md:p-12">
@@ -80,7 +80,7 @@ export function SetupDetailsPage() {
                                 <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
                                     <span className="inline-flex items-center gap-2">
                                         <Calendar className="h-4 w-4" />
-                                        {new Date(setup.createdAt).toLocaleDateString('en-US', {
+                                        {new Date(setup.createdAt).toLocaleDateString('pt-BR', {
                                             day: '2-digit',
                                             month: 'long',
                                             year: 'numeric',
@@ -92,7 +92,7 @@ export function SetupDetailsPage() {
                             <div className="flex flex-col items-start gap-4 lg:items-end">
                                 <div className="rounded-2xl border border-border/60 bg-surface px-6 py-4 text-right">
                                     <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                                        Estimated cost
+                                        Custo estimado
                                     </div>
                                     <div className="font-display text-3xl font-bold text-gradient">
                                         {formatCurrency(setup.estimatedCost)}
@@ -101,7 +101,7 @@ export function SetupDetailsPage() {
                                 <div className="flex gap-2">
                                     <Button asChild variant="glass" size="default">
                                         <Link to={`/setups/${setup.id}/edit`}>
-                                            <Pencil className="h-4 w-4" /> Edit
+                                            <Pencil className="h-4 w-4" /> Editar
                                         </Link>
                                     </Button>
 
@@ -112,22 +112,22 @@ export function SetupDetailsPage() {
                                                 size="default"
                                                 className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                                             >
-                                                <Trash2 className="h-4 w-4" /> Delete
+                                                <Trash2 className="h-4 w-4" /> Deletar
                                             </Button>
                                         </AlertDialogTrigger>
                                         <AlertDialogContent className="glass-strong rounded-2xl border-border/50">
                                             <AlertDialogHeader>
                                                 <AlertDialogTitle className="font-display">
-                                                    Delete this setup?
+                                                    Deletar este setup?
                                                 </AlertDialogTitle>
                                                 <AlertDialogDescription>
-                                                    This action cannot be undone. The setup and all
-                                                    gear items will be permanently removed.
+                                                    Essa ação não pode ser desfeita. O setup e todos
+                                                    os gear items serão removidos permanentemente.
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
                                                 <AlertDialogCancel className="rounded-xl">
-                                                    Cancel
+                                                    Cancelar
                                                 </AlertDialogCancel>
                                                 <AlertDialogAction
                                                     className="rounded-xl bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -136,7 +136,7 @@ export function SetupDetailsPage() {
                                                         navigate('/');
                                                     }}
                                                 >
-                                                    Delete setup
+                                                    Deletar setup
                                                 </AlertDialogAction>
                                             </AlertDialogFooter>
                                         </AlertDialogContent>
@@ -152,7 +152,7 @@ export function SetupDetailsPage() {
                 <div className="space-y-10">
                     <div>
                         <h2 className="mb-4 font-display text-2xl font-bold tracking-tight">
-                            About the setup
+                            Sobre o setup
                         </h2>
                         <p className="text-base leading-relaxed text-muted-foreground">
                             {setup.description}
@@ -163,7 +163,7 @@ export function SetupDetailsPage() {
                         <div className="mb-5 flex items-center justify-between">
                             <div>
                                 <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                                    Equipment
+                                    Equipamentos
                                 </div>
                                 <h2 className="font-display text-2xl font-bold tracking-tight">
                                     Gear list ({setup.gear.length})
@@ -175,8 +175,8 @@ export function SetupDetailsPage() {
                         {setup.gear.length === 0 ? (
                             <EmptyState
                                 icon={Plus}
-                                title="No gear yet"
-                                description="Add the equipment that makes up this setup. Keyboard, mouse, monitor, chair — everything counts."
+                                title="Sem gear ainda"
+                                description="Adicione os equipamentos que compõem esse setup. Teclado, mouse, monitor, cadeira — tudo conta."
                                 action={<AddGearButton setupId={setup.id} />}
                             />
                         ) : (
@@ -188,20 +188,20 @@ export function SetupDetailsPage() {
                 <aside className="space-y-4">
                     <div className="glass rounded-2xl p-6">
                         <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                            Summary
+                            Resumo
                         </div>
-                        <h3 className="mt-1 font-display text-xl font-bold">Total investment</h3>
+                        <h3 className="mt-1 font-display text-xl font-bold">Investimento total</h3>
                         <div className="mt-4 space-y-3">
                             <SummaryRow
-                                label="Estimated cost"
+                                label="Custo estimado"
                                 value={formatCurrency(setup.estimatedCost)}
                             />
-                            <SummaryRow label="Gear total" value={formatCurrency(totalGear)} />
+                            <SummaryRow label="Soma do gear" value={formatCurrency(totalGear)} />
                             <SummaryRow
-                                label="Registered items"
+                                label="Itens cadastrados"
                                 value={String(setup.gear.length)}
                             />
-                            <SummaryRow label="Category" value={CATEGORY_LABELS[setup.category]} />
+                            <SummaryRow label="Categoria" value={CATEGORY_LABELS[setup.category]} />
                         </div>
                     </div>
                 </aside>

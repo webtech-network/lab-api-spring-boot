@@ -31,23 +31,23 @@ export type GearType = (typeof GEAR_TYPES)[number];
 
 export const CATEGORY_LABELS: Record<SetupCategory, string> = {
     GAMING: 'Gaming',
-    DEVELOPMENT: 'Development',
-    MINIMALIST: 'Minimalist',
-    STUDY: 'Study',
+    DEVELOPMENT: 'Desenvolvimento',
+    MINIMALIST: 'Minimalista',
+    STUDY: 'Estudos',
     STREAMING: 'Streaming',
 };
 
 export const GEAR_LABELS: Record<GearType, string> = {
-    KEYBOARD: 'Keyboard',
+    KEYBOARD: 'Teclado',
     MOUSE: 'Mouse',
     MONITOR: 'Monitor',
     HEADSET: 'Headset',
-    CHAIR: 'Chair',
-    MICROPHONE: 'Microphone',
+    CHAIR: 'Cadeira',
+    MICROPHONE: 'Microfone',
     WEBCAM: 'Webcam',
     NOTEBOOK: 'Notebook',
-    DESK: 'Desk',
-    OTHER: 'Other',
+    DESK: 'Mesa',
+    OTHER: 'Outro',
 };
 
 export interface GearItem {
@@ -243,7 +243,7 @@ export const setupStore = {
             ...input,
             id: uid(),
             createdAt: new Date().toISOString(),
-            author: input.author ?? 'You',
+            author: input.author ?? 'Você',
             gear: [],
         };
         state = [setup, ...state];

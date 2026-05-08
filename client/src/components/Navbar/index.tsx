@@ -27,10 +27,10 @@ export function Navbar() {
                             Home
                         </NavLink>
                         <a
-                            href="#gallery"
+                            href="#galeria"
                             className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground"
                         >
-                            Gallery
+                            Galeria
                         </a>
                     </nav>
 
@@ -38,7 +38,7 @@ export function Navbar() {
                         <Button asChild variant="hero" size="sm" className="rounded-full">
                             <Link to="/setups/new">
                                 <Plus className="h-4 w-4" />
-                                <span className="hidden sm:inline">New Setup</span>
+                                <span className="hidden sm:inline">Novo Setup</span>
                             </Link>
                         </Button>
                     </div>

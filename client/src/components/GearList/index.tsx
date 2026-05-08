@@ -75,21 +75,21 @@ export function GearDialog({
             <DialogContent className="glass-strong max-w-md rounded-2xl border-border/50">
                 <DialogHeader>
                     <DialogTitle className="font-display text-xl">
-                        {initial ? 'Edit item' : 'Add gear'}
+                        {initial ? 'Editar item' : 'Adicionar gear'}
                     </DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4 pt-2">
-                    <FormRow label="Name">
+                    <FormRow label="Nome">
                         <Input
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
-                            placeholder="e.g. MX Master 3S"
+                            placeholder="Ex: MX Master 3S"
                             className="h-11 rounded-xl border-border/60 bg-surface"
                         />
                     </FormRow>
                     <div className="grid gap-4 sm:grid-cols-2">
-                        <FormRow label="Brand">
+                        <FormRow label="Marca">
                             <Input
                                 value={brand}
                                 onChange={(e) => setBrand(e.target.value)}
@@ -98,7 +98,7 @@ export function GearDialog({
                                 className="h-11 rounded-xl border-border/60 bg-surface"
                             />
                         </FormRow>
-                        <FormRow label="Type">
+                        <FormRow label="Tipo">
                             <Select value={type} onValueChange={(v) => setType(v as GearType)}>
                                 <SelectTrigger className="h-11 rounded-xl border-border/60 bg-surface">
                                     <SelectValue />
@@ -113,7 +113,7 @@ export function GearDialog({
                             </Select>
                         </FormRow>
                     </div>
-                    <FormRow label="Price">
+                    <FormRow label="Preço (R$)">
                         <Input
                             type="number"
                             min={0}
@@ -127,10 +127,10 @@ export function GearDialog({
                     </FormRow>
                     <div className="flex justify-end gap-2 pt-2">
                         <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
-                            Cancel
+                            Cancelar
                         </Button>
                         <Button type="submit" variant="hero">
-                            {initial ? 'Save' : 'Add'}
+                            {initial ? 'Salvar' : 'Adicionar'}
                         </Button>
                     </div>
                 </form>
@@ -214,7 +214,7 @@ export function AddGearButton({ setupId }: { setupId: string }) {
             setupId={setupId}
             trigger={
                 <Button variant="glass" size="lg" className="rounded-2xl">
-                    <Plus className="h-4 w-4" /> Add gear
+                    <Plus className="h-4 w-4" /> Adicionar gear
                 </Button>
             }
         />
