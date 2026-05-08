@@ -7,7 +7,7 @@ export function Navbar() {
         <header className="sticky top-0 z-50 w-full">
             <div className="glass-strong border-b border-border/40">
                 <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-8">
-                    <Link to="/" className="group flex items-center gap-2.5">
+                    <Link to="/" className="group flex cursor-pointer items-center gap-2.5">
                         <div className="leading-none">
                             <div className="font-display text-lg font-semibold tracking-tight">
                                 Setup<span className="text-gradient">Hub</span>
@@ -19,7 +19,7 @@ export function Navbar() {
                         <NavLink
                             to="/"
                             className={({ isActive }) =>
-                                `text-sm font-medium transition-smooth hover:text-foreground ${
+                                `cursor-pointer text-sm font-medium transition-smooth hover:text-foreground ${
                                     isActive ? 'text-foreground' : 'text-muted-foreground'
                                 }`
                             }
@@ -28,7 +28,7 @@ export function Navbar() {
                         </NavLink>
                         <a
                             href="#galeria"
-                            className="text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground"
+                            className="cursor-pointer text-sm font-medium text-muted-foreground transition-smooth hover:text-foreground"
                         >
                             Galeria
                         </a>

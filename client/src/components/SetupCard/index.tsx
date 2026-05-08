@@ -6,7 +6,7 @@ export function SetupCard({ setup, featured = false }: { setup: Setup; featured?
     return (
         <Link
             to={`/setups/${setup.id}`}
-            className={`group relative block overflow-hidden rounded-3xl border border-border/50 bg-card hover-lift ${
+            className={`group relative block cursor-pointer overflow-hidden rounded-3xl border border-border/50 bg-card hover-lift ${
                 featured ? 'md:col-span-2 md:row-span-2' : ''
             }`}
         >

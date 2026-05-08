@@ -115,7 +115,12 @@ export function SetupForm({ initial }: { initial?: Setup }) {
                 <Button type="submit" variant="hero" size="lg">
                     {initial ? 'Salvar alterações' : 'Publicar setup'}
                 </Button>
-                <Button type="button" variant="ghost" size="lg" onClick={() => navigate('/')}>
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="lg"
+                    onClick={() => navigate(initial ? `/setups/${initial.id}` : '/')}
+                >
                     Cancelar
                 </Button>
             </div>

@@ -63,7 +63,7 @@ export function SetupDetailsPage() {
                 <div className="mx-auto -mt-48 max-w-7xl px-4 md:px-8">
                     <Link
                         to="/"
-                        className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/60 bg-surface/80 px-4 py-2 text-xs font-medium text-muted-foreground backdrop-blur-md transition-smooth hover:text-foreground"
+                        className="mb-6 inline-flex cursor-pointer items-center gap-2 rounded-full border border-border/60 bg-surface/80 px-4 py-2 text-xs font-medium text-muted-foreground backdrop-blur-md transition-smooth hover:text-foreground"
                     >
                         <ArrowLeft className="h-3.5 w-3.5" /> Galeria
                     </Link>
@@ -110,7 +110,7 @@ export function SetupDetailsPage() {
                                             <Button
                                                 variant="ghost"
                                                 size="default"
-                                                className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                className="cursor-pointer text-destructive hover:bg-destructive/10 hover:text-destructive"
                                             >
                                                 <Trash2 className="h-4 w-4" /> Deletar
                                             </Button>

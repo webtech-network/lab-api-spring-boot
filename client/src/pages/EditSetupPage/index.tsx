@@ -17,7 +17,7 @@ export function EditSetupPage() {
             <div className="mx-auto max-w-3xl px-4 py-12 md:px-8">
                 <Link
                     to={`/setups/${id}`}
-                    className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground transition-smooth hover:text-foreground"
+                    className="mb-6 inline-flex cursor-pointer items-center gap-2 text-sm text-muted-foreground transition-smooth hover:text-foreground"
                 >
                     <ArrowLeft className="h-4 w-4" /> Voltar
                 </Link>
