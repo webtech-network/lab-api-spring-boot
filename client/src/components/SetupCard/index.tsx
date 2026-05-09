@@ -1,8 +1,16 @@
-import { CATEGORY_LABELS, formatCurrency, GEAR_LABELS, type Setup } from '@/lib/setup-store';
+import { GEAR_TYPE_LABELS, SETUP_CATEGORY_LABELS } from '@/constants/setup-options';
+import { formatCurrency } from '@/lib/format';
+import type { SetupWithGear } from '@/types/api';
 import { ArrowUpRight, Layers } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export function SetupCard({ setup, featured = false }: { setup: Setup; featured?: boolean }) {
+export function SetupCard({
+    setup,
+    featured = false,
+}: {
+    setup: SetupWithGear;
+    featured?: boolean;
+}) {
     return (
         <Link
             to={`/setups/${setup.id}`}
@@ -22,7 +30,7 @@ export function SetupCard({ setup, featured = false }: { setup: Setup; featured?
                 <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
                 <div className="absolute left-4 top-4 flex items-center gap-2">
                     <span className="rounded-full bg-background/60 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-foreground backdrop-blur-md">
-                        {CATEGORY_LABELS[setup.category]}
+                        {SETUP_CATEGORY_LABELS[setup.category]}
                     </span>
                 </div>
                 <div className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full bg-background/60 opacity-0 backdrop-blur-md transition-smooth group-hover:opacity-100">
@@ -54,7 +62,7 @@ export function SetupCard({ setup, featured = false }: { setup: Setup; featured?
                                 key={g.id}
                                 className="rounded-full border border-border/60 bg-secondary/50 px-2.5 py-1 text-[10px] font-medium text-muted-foreground"
                             >
-                                {GEAR_LABELS[g.type]} · {g.brand}
+                                {GEAR_TYPE_LABELS[g.type]} · {g.brand}
                             </span>
                         ))}
                         {setup.gear.length > 3 && (

@@ -1,9 +1,29 @@
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Sparkles } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { SetupForm } from '@/components/SetupForm';
+import { getErrorMessage } from '@/lib/error-handler';
+import { setupService, type SetupPayload } from '@/services/setup-service';
+import { ArrowLeft, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export function NewSetupPage() {
+    const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    async function handleCreate(payload: SetupPayload) {
+        try {
+            setIsSubmitting(true);
+            const created = await setupService.create(payload);
+            toast.success('Setup publicado com sucesso.');
+            navigate(`/setups/${created.id}`);
+        } catch (error) {
+            toast.error(getErrorMessage(error));
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
+
     return (
         <div className="min-h-screen pb-24">
             <Navbar />
@@ -30,7 +50,7 @@ export function NewSetupPage() {
                 </div>
 
                 <div className="glass-strong rounded-3xl p-6 md:p-10">
-                    <SetupForm />
+                    <SetupForm onSubmit={handleCreate} isSubmitting={isSubmitting} />
                 </div>
             </div>
         </div>

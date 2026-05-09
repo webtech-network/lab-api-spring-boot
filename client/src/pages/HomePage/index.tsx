@@ -1,13 +1,74 @@
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import heroImage from '@/assets/hero-setup.jpg';
+import { EmptyState } from '@/components/EmptyState';
 import { Navbar } from '@/components/Navbar';
 import { SetupCard } from '@/components/SetupCard';
 import { Button } from '@/components/ui/button';
-import heroImage from '@/assets/hero-setup.jpg';
-import { useSetups } from '@/lib/setup-store';
+import { formatCurrency } from '@/lib/format';
+import { gearItemService, setupService } from '@/services/setup-service';
+import type { SetupWithGear } from '@/types/api';
+import { ArrowRight, SearchX } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export function HomePage() {
-    const setups = useSetups();
+    const [setups, setSetups] = useState<SetupWithGear[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        async function loadData() {
+            try {
+                setIsLoading(true);
+                const [setupList, gearList] = await Promise.all([
+                    setupService.list(),
+                    gearItemService.listAll(),
+                ]);
+
+                if (!isMounted) return;
+
+                const gearBySetupId = new Map<string, typeof gearList>();
+                gearList.forEach((gearItem) => {
+                    const current = gearBySetupId.get(gearItem.setupId) ?? [];
+                    current.push(gearItem);
+                    gearBySetupId.set(gearItem.setupId, current);
+                });
+
+                const merged = setupList.map((setup) => {
+                    const gear = gearBySetupId.get(setup.id) ?? [];
+                    return {
+                        ...setup,
+                        gear,
+                        estimatedCost: gearItemService.toEstimatedCost(gear, setup.estimatedCost),
+                    };
+                });
+
+                setSetups(merged);
+            } catch {
+                // silently fall through to empty state
+            } finally {
+                if (isMounted) {
+                    setIsLoading(false);
+                }
+            }
+        }
+
+        loadData();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    const publishedCount = useMemo(() => setups.length, [setups]);
+    const totalGearItems = useMemo(
+        () => setups.reduce((total, setup) => total + setup.gear.length, 0),
+        [setups]
+    );
+    const totalEstimated = useMemo(
+        () => setups.reduce((total, setup) => total + setup.estimatedCost, 0),
+        [setups]
+    );
 
     return (
         <div className="min-h-screen">
@@ -49,6 +110,15 @@ export function HomePage() {
                                 <a href="#galeria">Explorar galeria</a>
                             </Button>
                         </div>
+
+                        <div className="grid gap-3 pt-4 text-left sm:grid-cols-3">
+                            <MetricCard label="Publicados" value={String(publishedCount)} />
+                            <MetricCard label="Itens cadastrados" value={String(totalGearItems)} />
+                            <MetricCard
+                                label="Investimento total"
+                                value={formatCurrency(totalEstimated)}
+                            />
+                        </div>
                     </div>
                 </div>
             </section>
@@ -64,16 +134,42 @@ export function HomePage() {
                         </h2>
                     </div>
                     <div className="hidden text-sm text-muted-foreground md:block">
-                        {setups.length} publicados
+                        {publishedCount} publicados
                     </div>
                 </div>
 
-                <div className="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {setups.map((s) => (
-                        <SetupCard key={s.id} setup={s} />
-                    ))}
-                </div>
+                {isLoading ? (
+                    <div className="text-sm text-muted-foreground">Carregando setups...</div>
+                ) : setups.length === 0 ? (
+                    <EmptyState
+                        icon={SearchX}
+                        title="Nenhum setup publicado"
+                        description="Seja o primeiro a publicar seu setup na galeria."
+                        action={
+                            <Button asChild variant="hero">
+                                <Link to="/setups/new">Publicar setup</Link>
+                            </Button>
+                        }
+                    />
+                ) : (
+                    <div className="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        {setups.map((s) => (
+                            <SetupCard key={s.id} setup={s} />
+                        ))}
+                    </div>
+                )}
             </section>
+        </div>
+    );
+}
+
+function MetricCard({ label, value }: { label: string; value: string }) {
+    return (
+        <div className="rounded-2xl border border-border/60 bg-background/40 px-4 py-3 backdrop-blur-md">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                {label}
+            </div>
+            <div className="mt-1 font-mono text-sm font-semibold text-foreground">{value}</div>
         </div>
     );
 }

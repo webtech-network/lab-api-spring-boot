@@ -14,53 +14,71 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import {
-    formatCurrency,
-    GEAR_LABELS,
-    GEAR_TYPES,
-    setupStore,
-    type GearItem,
-    type GearType,
-} from '@/lib/setup-store';
+import { GEAR_TYPE_LABELS, GEAR_TYPE_OPTIONS } from '@/constants/setup-options';
+import { getErrorMessage } from '@/lib/error-handler';
+import { formatCurrency } from '@/lib/format';
+import { gearItemRequestSchema } from '@/schemas/setup-schemas';
+import type { GearItemPayload, GearItemResponse, GearType } from '@/types/api';
 import { Pencil, Plus, Trash2, X } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export function GearDialog({
     setupId,
     initial,
+    onSubmit,
     trigger,
 }: {
     setupId: string;
-    initial?: GearItem;
+    initial?: GearItemResponse;
+    onSubmit: (payload: GearItemPayload, gearId?: string) => Promise<void>;
     trigger: React.ReactNode;
 }) {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState(initial?.name ?? '');
     const [brand, setBrand] = useState(initial?.brand ?? '');
-    const [type, setType] = useState<GearType>(initial?.type ?? 'KEYBOARD');
+    const [type, setType] = useState<GearType>(initial?.type ?? GEAR_TYPE_OPTIONS[0].value);
     const [price, setPrice] = useState<string>(initial ? String(initial.price) : '');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     function reset() {
         if (!initial) {
             setName('');
             setBrand('');
-            setType('KEYBOARD');
+            setType(GEAR_TYPE_OPTIONS[0].value);
             setPrice('');
         }
     }
 
-    function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         const data = {
             name: name.trim(),
             brand: brand.trim(),
             type,
             price: Number(price) || 0,
+            setupId,
         };
-        if (initial) setupStore.updateGear(setupId, initial.id, data);
-        else setupStore.addGear(setupId, data);
-        setOpen(false);
-        reset();
+
+        const parsed = gearItemRequestSchema.safeParse(data);
+        if (!parsed.success) {
+            const message = parsed.error.issues
+                .map((issue) => `${issue.path.join('.')}: ${issue.message}`)
+                .join(' | ');
+            toast.error(message);
+            return;
+        }
+
+        try {
+            setIsSubmitting(true);
+            await onSubmit(parsed.data, initial?.id);
+            setOpen(false);
+            reset();
+        } catch (error) {
+            toast.error(getErrorMessage(error));
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     return (
@@ -104,9 +122,9 @@ export function GearDialog({
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {GEAR_TYPES.map((t) => (
-                                        <SelectItem key={t} value={t}>
-                                            {GEAR_LABELS[t]}
+                                    {GEAR_TYPE_OPTIONS.map((option) => (
+                                        <SelectItem key={option.value} value={option.value}>
+                                            {option.label}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
@@ -129,7 +147,7 @@ export function GearDialog({
                         <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
                             Cancelar
                         </Button>
-                        <Button type="submit" variant="hero">
+                        <Button type="submit" variant="hero" disabled={isSubmitting}>
                             {initial ? 'Salvar' : 'Adicionar'}
                         </Button>
                     </div>
@@ -150,7 +168,17 @@ function FormRow({ label, children }: { label: string; children: React.ReactNode
     );
 }
 
-export function GearList({ setupId, items }: { setupId: string; items: GearItem[] }) {
+export function GearList({
+    setupId,
+    items,
+    onSubmit,
+    onRemove,
+}: {
+    setupId: string;
+    items: GearItemResponse[];
+    onSubmit: (payload: GearItemPayload, gearId?: string) => Promise<void>;
+    onRemove: (gearId: string) => Promise<void>;
+}) {
     if (items.length === 0) return null;
 
     return (
@@ -169,7 +197,7 @@ export function GearList({ setupId, items }: { setupId: string; items: GearItem[
                         <div className="flex items-center gap-2">
                             <h4 className="truncate font-medium">{g.name}</h4>
                             <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
-                                {GEAR_LABELS[g.type]}
+                                {GEAR_TYPE_LABELS[g.type]}
                             </span>
                         </div>
                         <p className="mt-0.5 text-xs text-muted-foreground">{g.brand}</p>
@@ -183,6 +211,7 @@ export function GearList({ setupId, items }: { setupId: string; items: GearItem[
                         <GearDialog
                             setupId={setupId}
                             initial={g}
+                            onSubmit={onSubmit}
                             trigger={
                                 <Button
                                     size="icon"
@@ -197,7 +226,13 @@ export function GearList({ setupId, items }: { setupId: string; items: GearItem[
                             size="icon"
                             variant="ghost"
                             className="h-8 w-8 rounded-full text-destructive hover:bg-destructive/10 hover:text-destructive"
-                            onClick={() => setupStore.removeGear(setupId, g.id)}
+                            onClick={async () => {
+                                try {
+                                    await onRemove(g.id);
+                                } catch (error) {
+                                    toast.error(getErrorMessage(error));
+                                }
+                            }}
                         >
                             <X className="h-3.5 w-3.5" />
                         </Button>
@@ -208,10 +243,17 @@ export function GearList({ setupId, items }: { setupId: string; items: GearItem[
     );
 }
 
-export function AddGearButton({ setupId }: { setupId: string }) {
+export function AddGearButton({
+    setupId,
+    onSubmit,
+}: {
+    setupId: string;
+    onSubmit: (payload: GearItemPayload, gearId?: string) => Promise<void>;
+}) {
     return (
         <GearDialog
             setupId={setupId}
+            onSubmit={onSubmit}
             trigger={
                 <Button variant="glass" size="lg" className="rounded-2xl">
                     <Plus className="h-4 w-4" /> Adicionar gear

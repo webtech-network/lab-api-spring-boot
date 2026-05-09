@@ -46,6 +46,22 @@ public class GlobalExceptionHandler {
                                 .body(error);
         }
 
+        @ExceptionHandler(SetupHasItemsException.class)
+
+        public ResponseEntity<ErrorResponse> handleSetupHasItems(
+                        SetupHasItemsException ex,
+                        HttpServletRequest request) {
+                ErrorResponse error = ErrorResponse.of(
+                                HttpStatus.CONFLICT.value(),
+                                "Conflict",
+                                ex.getMessage(),
+                                request.getRequestURI());
+
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(error);
+        }
+
         @ExceptionHandler(MethodArgumentNotValidException.class)
 
         public ResponseEntity<ErrorResponse> handleValidationErrors(

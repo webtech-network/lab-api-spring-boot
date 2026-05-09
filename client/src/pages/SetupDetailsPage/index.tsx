@@ -13,15 +13,143 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { CATEGORY_LABELS, formatCurrency, setupStore, useSetups } from '@/lib/setup-store';
+import { SETUP_CATEGORY_LABELS } from '@/constants/setup-options';
+import { getErrorMessage } from '@/lib/error-handler';
+import { formatCurrency } from '@/lib/format';
+import {
+    gearItemService,
+    setupService,
+    type GearItemPayload,
+    type GearItemResponse,
+} from '@/services/setup-service';
+import type { SetupResponse } from '@/types/api';
 import { ArrowLeft, Calendar, Pencil, Plus, SearchX, Trash2 } from 'lucide-react';
+import { AxiosError } from 'axios';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export function SetupDetailsPage() {
     const { id = '' } = useParams();
     const navigate = useNavigate();
-    const setups = useSetups();
-    const setup = setups.find((s) => s.id === id);
+    const [setup, setSetup] = useState<SetupResponse | null>(null);
+    const [gearItems, setGearItems] = useState<GearItemResponse[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        async function loadSetupData() {
+            try {
+                setIsLoading(true);
+                const [setupData, gearData] = await Promise.all([
+                    setupService.getById(id),
+                    gearItemService.listBySetup(id),
+                ]);
+
+                if (!isMounted) return;
+
+                setSetup(setupData);
+                setGearItems(gearData);
+            } catch (error) {
+                toast.error(getErrorMessage(error));
+            } finally {
+                if (isMounted) {
+                    setIsLoading(false);
+                }
+            }
+        }
+
+        if (id) {
+            loadSetupData();
+        }
+
+        return () => {
+            isMounted = false;
+        };
+    }, [id]);
+
+    const totalGear = useMemo(() => gearItemService.sumPrices(gearItems), [gearItems]);
+
+    async function updateEstimatedCost(nextGearItems: GearItemResponse[]) {
+        if (!setup) return;
+
+        const nextEstimatedCost = gearItemService.toEstimatedCost(
+            nextGearItems,
+            setup.estimatedCost
+        );
+
+        const updatedSetup = await setupService.update(setup.id, {
+            title: setup.title,
+            description: setup.description,
+            category: setup.category,
+            imageUrl: setup.imageUrl,
+            estimatedCost: nextEstimatedCost,
+        });
+
+        setSetup(updatedSetup);
+    }
+
+    async function handleGearSubmit(payload: GearItemPayload, gearId?: string) {
+        if (!setup) return;
+
+        if (gearId) {
+            const updated = await gearItemService.update(gearId, payload);
+            const nextItems = gearItems.map((item) => (item.id === updated.id ? updated : item));
+            setGearItems(nextItems);
+            await updateEstimatedCost(nextItems);
+            toast.success('Item atualizado com sucesso.');
+            return;
+        }
+
+        const created = await gearItemService.create(payload);
+        const nextItems = [...gearItems, created];
+        setGearItems(nextItems);
+        await updateEstimatedCost(nextItems);
+        toast.success('Item adicionado com sucesso.');
+    }
+
+    async function handleGearRemove(gearId: string) {
+        await gearItemService.remove(gearId);
+        const nextItems = gearItems.filter((item) => item.id !== gearId);
+        setGearItems(nextItems);
+        await updateEstimatedCost(nextItems);
+        toast.success('Item removido com sucesso.');
+    }
+
+    async function handleDeleteSetup() {
+        if (!setup) return;
+
+        try {
+            await setupService.remove(setup.id);
+            toast.success('Setup removido com sucesso.');
+            navigate('/');
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                const status = error.response?.status;
+                if (status === 409 || status === 500) {
+                    toast.error(
+                        'Este setup possui itens vinculados. Remova todos os gear items antes de excluí-lo.',
+                    );
+                } else {
+                    toast.error(getErrorMessage(error));
+                }
+            } else {
+                toast.error(getErrorMessage(error));
+            }
+        }
+    }
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen">
+                <Navbar />
+                <div className="mx-auto max-w-3xl px-4 py-24 md:px-8">
+                    <div className="text-sm text-muted-foreground">Carregando setup...</div>
+                </div>
+            </div>
+        );
+    }
 
     if (!setup) {
         return (
@@ -42,8 +170,6 @@ export function SetupDetailsPage() {
             </div>
         );
     }
-
-    const totalGear = setup.gear.reduce((acc, g) => acc + g.price, 0);
 
     return (
         <div className="min-h-screen pb-24">
@@ -72,7 +198,7 @@ export function SetupDetailsPage() {
                         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
                             <div className="space-y-5">
                                 <span className="inline-block rounded-full bg-gradient-primary px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground shadow-glow">
-                                    {CATEGORY_LABELS[setup.category]}
+                                    {SETUP_CATEGORY_LABELS[setup.category]}
                                 </span>
                                 <h1 className="max-w-3xl font-display text-4xl font-bold tracking-tight md:text-6xl">
                                     {setup.title}
@@ -131,10 +257,7 @@ export function SetupDetailsPage() {
                                                 </AlertDialogCancel>
                                                 <AlertDialogAction
                                                     className="rounded-xl bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                                    onClick={() => {
-                                                        setupStore.remove(setup.id);
-                                                        navigate('/');
-                                                    }}
+                                                    onClick={handleDeleteSetup}
                                                 >
                                                     Deletar setup
                                                 </AlertDialogAction>
@@ -166,21 +289,28 @@ export function SetupDetailsPage() {
                                     Equipamentos
                                 </div>
                                 <h2 className="font-display text-2xl font-bold tracking-tight">
-                                    Gear list ({setup.gear.length})
+                                    Gear list ({gearItems.length})
                                 </h2>
                             </div>
-                            <AddGearButton setupId={setup.id} />
+                            <AddGearButton setupId={setup.id} onSubmit={handleGearSubmit} />
                         </div>
 
-                        {setup.gear.length === 0 ? (
+                        {gearItems.length === 0 ? (
                             <EmptyState
                                 icon={Plus}
                                 title="Sem gear ainda"
                                 description="Adicione os equipamentos que compõem esse setup. Teclado, mouse, monitor, cadeira — tudo conta."
-                                action={<AddGearButton setupId={setup.id} />}
+                                action={
+                                    <AddGearButton setupId={setup.id} onSubmit={handleGearSubmit} />
+                                }
                             />
                         ) : (
-                            <GearList setupId={setup.id} items={setup.gear} />
+                            <GearList
+                                setupId={setup.id}
+                                items={gearItems}
+                                onSubmit={handleGearSubmit}
+                                onRemove={handleGearRemove}
+                            />
                         )}
                     </div>
                 </div>
@@ -199,9 +329,12 @@ export function SetupDetailsPage() {
                             <SummaryRow label="Soma do gear" value={formatCurrency(totalGear)} />
                             <SummaryRow
                                 label="Itens cadastrados"
-                                value={String(setup.gear.length)}
+                                value={String(gearItems.length)}
                             />
-                            <SummaryRow label="Categoria" value={CATEGORY_LABELS[setup.category]} />
+                            <SummaryRow
+                                label="Categoria"
+                                value={SETUP_CATEGORY_LABELS[setup.category]}
+                            />
                         </div>
                     </div>
                 </aside>

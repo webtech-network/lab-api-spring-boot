@@ -10,8 +10,10 @@ import network.webtech.setuphub_api.dto.request.SetupRequest;
 import network.webtech.setuphub_api.dto.response.SetupResponse;
 import network.webtech.setuphub_api.entity.Setup;
 import network.webtech.setuphub_api.enums.SetupCategory;
+import network.webtech.setuphub_api.exception.SetupHasItemsException;
 import network.webtech.setuphub_api.exception.SetupNotFoundException;
 import network.webtech.setuphub_api.mapper.SetupMapper;
+import network.webtech.setuphub_api.repository.GearItemRepository;
 import network.webtech.setuphub_api.repository.SetupRepository;
 import network.webtech.setuphub_api.service.SetupService;
 
@@ -21,6 +23,7 @@ public class SetupServiceImpl implements SetupService {
 
     private final SetupRepository repository;
     private final SetupMapper mapper;
+    private final GearItemRepository gearItemRepository;
 
     @Override
     public SetupResponse create(SetupRequest request) {
@@ -80,6 +83,11 @@ public class SetupServiceImpl implements SetupService {
     public void delete(UUID id) {
         Setup setup = repository.findById(id)
                 .orElseThrow(() -> new SetupNotFoundException(id));
+
+        long itemCount = gearItemRepository.findBySetupId(id).size();
+        if (itemCount > 0) {
+            throw new SetupHasItemsException(id, itemCount);
+        }
 
         repository.delete(setup);
     }
